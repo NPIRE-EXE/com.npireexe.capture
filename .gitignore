@@ -1,0 +1,8 @@
+dist/
+__pycache__/
+*.pyc
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,21 @@
+{
+    "name": "NPIREEXE.Capture.Editor",
+    "rootNamespace": "NPIREEXE.Capture.Editor",
+    "references": [
+        "NPIREEXE.Capture",
+        "Unity.Recorder",
+        "Unity.Recorder.Base",
+        "Unity.Recorder.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
