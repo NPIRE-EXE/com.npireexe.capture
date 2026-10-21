@@ -1,6 +1,6 @@
 {
   "name": "com.npireexe.capture",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "NPIRE EXE Capture",
   "description": "Editor screenshot and gameplay video capture. Screenshots with or without UI, Play Mode recording with pause/resume via Unity Recorder, a dockable Recording Control window and a Scene View REC indicator.",
   "unity": "6000.0",

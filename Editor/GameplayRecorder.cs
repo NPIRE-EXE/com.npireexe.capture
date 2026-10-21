@@ -98,10 +98,11 @@ namespace NPIREEXE.Capture.Editor
             movieSettings.name = "Gameplay Movie Recorder";
             movieSettings.Enabled = true;
             movieSettings.OutputFormat = MovieRecorderSettings.VideoRecorderOutputFormat.MP4;
+            Vector2Int size = OutputResolution();
             movieSettings.ImageInputSettings = new GameViewInputSettings
             {
-                OutputWidth = Screen.width,
-                OutputHeight = Screen.height
+                OutputWidth = size.x,
+                OutputHeight = size.y
             };
             movieSettings.AudioInputSettings.PreserveAudio = true;
             movieSettings.OutputFile = Path.Combine("Recordings", outputName);
@@ -113,10 +114,33 @@ namespace NPIREEXE.Capture.Editor
 
             controller = new RecorderController(controllerSettings);
             controller.PrepareRecording();
-            controller.StartRecording();
+            if (!controller.StartRecording())
+            {
+                Debug.LogError("[GameplayRecorder] Recording failed to start; see the Recorder error above.");
+                controller = null;
+                segment--;
+                if (newSession) sessionName = null;
+                return;
+            }
             RecordingStateChanged?.Invoke(true);
 
-            Debug.Log($"[GameplayRecorder] Recording started: Recordings/{outputName}.mp4");
+            Debug.Log($"[GameplayRecorder] Recording started at {size.x}x{size.y}: Recordings/{outputName}.mp4");
+        }
+
+        /// <summary>
+        /// 1080 on the short side in the Game view's orientation, long side keeping its aspect.
+        /// MP4 rejects odd dimensions, which a free-aspect Game view often has.
+        /// </summary>
+        private static Vector2Int OutputResolution()
+        {
+            PlayModeWindow.GetRenderingResolution(out uint width, out uint height);
+            if (width == 0 || height == 0) return new Vector2Int(1920, 1080);
+
+            const int shortSide = 1080;
+            bool portrait = height > width;
+            float aspect = portrait ? (float)height / width : (float)width / height;
+            int longSide = Mathf.RoundToInt(shortSide * aspect / 2f) * 2;
+            return portrait ? new Vector2Int(shortSide, longSide) : new Vector2Int(longSide, shortSide);
         }
 
         private static void StopSegment()
