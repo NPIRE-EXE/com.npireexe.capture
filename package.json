@@ -1,15 +1,16 @@
 {
   "name": "com.npireexe.capture",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "displayName": "NPIRE EXE Capture",
-  "description": "Editor screenshot and gameplay video capture. Screenshots with or without UI, Play Mode recording with pause/resume via Unity Recorder, a dockable Recording Control window and a Scene View REC indicator.",
+  "description": "Editor screenshot and gameplay video capture. Screenshots with or without UI, Play Mode recording with pause/resume via Unity Recorder, a choice of recording resolution up to 4K, a Value Overlay card that shows live values in the Game View, a dockable Recording Control window and a Scene View REC indicator.",
   "unity": "6000.0",
   "author": {
     "name": "NPIRE EXE"
   },
   "license": "MIT",
-  "keywords": ["npire", "screenshot", "recorder", "capture"],
+  "keywords": ["npire", "screenshot", "recorder", "capture", "overlay"],
   "dependencies": {
-    "com.unity.recorder": "5.1.7"
+    "com.unity.recorder": "5.1.7",
+    "com.unity.ugui": "2.0.0"
   }
 }

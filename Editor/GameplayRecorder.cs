@@ -28,6 +28,22 @@ namespace NPIREEXE.Capture.Editor
         /// <summary>True once a session has started, even mid-pause — lets UI know whether "Resume" is meaningful.</summary>
         public static bool HasActiveSession => sessionName != null;
 
+        /// <summary>Short-side choices offered in the Recording Control window.</summary>
+        public static readonly int[] ShortSideOptions = { 720, 1080, 1440, 2160 };
+
+        private const string ShortSidePref = "NPIREEXE.Capture.ShortSide";
+
+        /// <summary>
+        /// Output size on the short side, in the Game view's orientation (1080 = 1920x1080 or
+        /// 1080x1920 at 16:9). 2160 records 4K, leaving room to crop or zoom in the edit.
+        /// Saved per machine; applies from the next recording segment.
+        /// </summary>
+        public static int ShortSide
+        {
+            get => EditorPrefs.GetInt(ShortSidePref, 1080);
+            set => EditorPrefs.SetInt(ShortSidePref, Mathf.Clamp(value / 2 * 2, 240, 4320));
+        }
+
         /// <summary>Fires whenever recording starts or stops/pauses — lets listeners react instead of polling IsRecording every frame.</summary>
         public static event Action<bool> RecordingStateChanged;
 
@@ -128,15 +144,15 @@ namespace NPIREEXE.Capture.Editor
         }
 
         /// <summary>
-        /// 1080 on the short side in the Game view's orientation, long side keeping its aspect.
+        /// ShortSide on the short side in the Game view's orientation, long side keeping its aspect.
         /// MP4 rejects odd dimensions, which a free-aspect Game view often has.
         /// </summary>
         private static Vector2Int OutputResolution()
         {
             PlayModeWindow.GetRenderingResolution(out uint width, out uint height);
-            if (width == 0 || height == 0) return new Vector2Int(1920, 1080);
+            int shortSide = ShortSide;
+            if (width == 0 || height == 0) return new Vector2Int(Mathf.RoundToInt(shortSide * 16f / 9f / 2f) * 2, shortSide);
 
-            const int shortSide = 1080;
             bool portrait = height > width;
             float aspect = portrait ? (float)height / width : (float)width / height;
             int longSide = Mathf.RoundToInt(shortSide * aspect / 2f) * 2;

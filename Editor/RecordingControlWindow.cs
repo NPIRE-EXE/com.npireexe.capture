@@ -22,7 +22,7 @@ namespace NPIREEXE.Capture.Editor
         public static void ShowWindow()
         {
             RecordingControlWindow window = GetWindow<RecordingControlWindow>("Recording");
-            window.minSize = new Vector2(200, 140);
+            window.minSize = new Vector2(200, 165);
         }
 
         private void OnEnable()
@@ -66,6 +66,14 @@ namespace NPIREEXE.Capture.Editor
             }
 
             GUILayout.Space(8);
+            int[] sides = GameplayRecorder.ShortSideOptions;
+            string[] labels = System.Array.ConvertAll(sides, v => v == 2160 ? "2160 (4K)" : v.ToString());
+            int current = System.Array.IndexOf(sides, GameplayRecorder.ShortSide);
+            int picked = EditorGUILayout.Popup(new GUIContent("Short side", "Output height (width in portrait). 2160 leaves room to crop or zoom in the edit. Applies from the next recording."), current < 0 ? 1 : current, labels);
+            if (picked != current)
+                GameplayRecorder.ShortSide = sides[picked];
+
+            GUILayout.Space(4);
             if (GUILayout.Button("Open Recordings Folder"))
                 GameplayRecorder.OpenRecordingsFolder();
 

@@ -36,13 +36,13 @@ namespace NPIREEXE.Capture
         /// <summary>Captures the Game View at the end of the current frame. Returns the file path.</summary>
         public static string Take(int scale = 1) => Capture("Screenshot", scale);
 
-        /// <summary>Hides every enabled Canvas for the captured frame, then restores them.</summary>
+        /// <summary>Hides every enabled Canvas for the captured frame, then restores them. A Value Overlay card stays unless its Keep In No UI Captures is off.</summary>
         public static string TakeWithoutUI(int scale = 1)
         {
             var hidden = new List<Canvas>();
             foreach (Canvas canvas in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
             {
-                if (!canvas.enabled)
+                if (!canvas.enabled || ValueOverlay.KeepsCanvas(canvas))
                     continue;
                 canvas.enabled = false;
                 hidden.Add(canvas);

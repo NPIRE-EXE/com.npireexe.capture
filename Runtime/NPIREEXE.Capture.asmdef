@@ -1,7 +1,9 @@
 {
     "name": "NPIREEXE.Capture",
     "rootNamespace": "NPIREEXE.Capture",
-    "references": [],
+    "references": [
+        "UnityEngine.UI"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
