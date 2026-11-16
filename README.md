@@ -7,6 +7,8 @@ Screenshot and gameplay video capture for the Unity Editor.
 - **Screenshots** of the Game View, with or without UI canvases.
 - **Gameplay recording** to MP4 in Play Mode, with pause/resume, built on Unity Recorder.
 - **Recording resolution** from 720 to 2160 (4K) on the short side.
+- **Editor label**: records the real Inspector (or any editor window) alongside gameplay and burns it
+  into a corner of the video, so viewers see the actual sliders and values change.
 - **Recording Control** window and a Scene View **REC indicator**.
 
 Requires Unity 6000.0 or newer. `com.unity.recorder` is installed automatically as a dependency.
@@ -56,6 +58,27 @@ View's orientation: 1080 gives 1920x1080 (or 1080x1920 in portrait), 2160 gives 
 when you want room to crop, zoom or pan in the edit. The choice is saved per machine and applies
 from the next segment. From code: `GameplayRecorder.ShortSide = 2160;`.
 
+### Editor label
+
+Shows the real Unity controls on the video: drag a slider in the Inspector during a recording and
+the label in the corner shows it moving.
+
+1. Open **Recording Control** and the **Editor label** section. Turn on **Record label**.
+2. **Window**: the editor window to show (Inspector by default; any open window works, including
+   custom tools).
+3. **Refresh preview**, then drag on the preview to pick the area, for example one component.
+   **Whole window** clears it.
+4. Pick the **Corner** and **Size** (1 = the window's size at 1080p, scaled with the recording).
+5. Record as usual. Each segment also writes:
+   - `<name>_label.mp4`: the label on its own, the same length as the gameplay clip.
+   - `<name>_labelled.mp4`: the gameplay with the label burned in (needs `ffmpeg` on PATH; turn off
+     **Burn into video** to skip it). The original recording is left as it was.
+
+The label is read from the window's own pixels, so other windows covering it don't matter. In a
+docked group, keep the window's tab selected while recording: only the selected tab is drawn. The
+label follows game frames like the gameplay recording, so the two stay in sync even when the editor
+runs below 60 fps. Settings are saved per machine.
+
 The REC indicator overlay lives in the Scene View. On an existing layout, enable it once from the
 Scene View Overlays menu ("Recording Indicator").
 
@@ -90,4 +113,4 @@ Both are outside `Assets/`. Add them to the project's `.gitignore`:
 | Assembly | Platforms | Contents |
 |---|---|---|
 | `NPIREEXE.Capture` | All | `ScreenshotCapture` |
-| `NPIREEXE.Capture.Editor` | Editor | Menus, `GameplayRecorder`, window, overlay |
+| `NPIREEXE.Capture.Editor` | Editor | Menus, `GameplayRecorder`, `EditorLabelCapture`, window, overlay |

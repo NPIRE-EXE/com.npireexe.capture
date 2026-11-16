@@ -28,6 +28,18 @@ namespace NPIREEXE.Capture.Editor
         /// <summary>True once a session has started, even mid-pause — lets UI know whether "Resume" is meaningful.</summary>
         public static bool HasActiveSession => sessionName != null;
 
+        /// <summary>
+        /// Full path of the MP4 the current (or last) segment writes to. Set before
+        /// RecordingStateChanged(true) fires, so listeners can name files to match.
+        /// </summary>
+        public static string CurrentSegmentPath { get; private set; }
+
+        /// <summary>
+        /// Video frame rate. The recorder captures one frame per game frame and plays them back at
+        /// this rate, so a slow editor gives a correct-speed video (game time), not a real-time one.
+        /// </summary>
+        public const float FrameRate = 60f;
+
         /// <summary>Short-side choices offered in the Recording Control window.</summary>
         public static readonly int[] ShortSideOptions = { 720, 1080, 1440, 2160 };
 
@@ -126,7 +138,7 @@ namespace NPIREEXE.Capture.Editor
             var controllerSettings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
             controllerSettings.AddRecorderSettings(movieSettings);
             controllerSettings.SetRecordModeToManual();
-            controllerSettings.FrameRate = 60f;
+            controllerSettings.FrameRate = FrameRate;
 
             controller = new RecorderController(controllerSettings);
             controller.PrepareRecording();
@@ -138,6 +150,7 @@ namespace NPIREEXE.Capture.Editor
                 if (newSession) sessionName = null;
                 return;
             }
+            CurrentSegmentPath = Path.Combine(Path.GetDirectoryName(Application.dataPath), "Recordings", outputName + ".mp4");
             RecordingStateChanged?.Invoke(true);
 
             Debug.Log($"[GameplayRecorder] Recording started at {size.x}x{size.y}: Recordings/{outputName}.mp4");
