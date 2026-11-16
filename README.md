@@ -7,10 +7,9 @@ Screenshot and gameplay video capture for the Unity Editor.
 - **Screenshots** of the Game View, with or without UI canvases.
 - **Gameplay recording** to MP4 in Play Mode, with pause/resume, built on Unity Recorder.
 - **Recording resolution** from 720 to 2160 (4K) on the short side.
-- **Value Overlay**: a card in a corner of the Game View showing live values, captured in recordings and screenshots.
 - **Recording Control** window and a Scene View **REC indicator**.
 
-Requires Unity 6000.0 or newer. `com.unity.recorder` and `com.unity.ugui` are installed automatically as dependencies.
+Requires Unity 6000.0 or newer. `com.unity.recorder` is installed automatically as a dependency.
 
 ## Install
 
@@ -48,7 +47,6 @@ All items are under **NPIRE EXE > Tools > Capture**.
 | Pause-Resume Gameplay Recording | Ctrl+Shift+F11 |
 | Recording Control (window) | |
 | Open Recordings Folder | |
-| Add Value Overlay | |
 
 Recording only works in Play Mode. Each pause starts a new segment file:
 `Recordings/Gameplay_<timestamp>_part01.mp4`, `_part02.mp4`, ...
@@ -60,40 +58,6 @@ from the next segment. From code: `GameplayRecorder.ShortSide = 2160;`.
 
 The REC indicator overlay lives in the Scene View. On an existing layout, enable it once from the
 Scene View Overlays menu ("Recording Indicator").
-
-### Value Overlay
-
-Shows values changing on screen while you record: a slider, a shader setting, rain level, a score.
-
-1. **NPIRE EXE > Tools > Capture > Add Value Overlay** (or add the **Value Overlay** component to any
-   GameObject).
-2. Add a row per value. **Source**:
-   - **Member**: drag in a GameObject, then pick a field or property from the list, which covers
-     every component on it (numbers, bools, enums, vectors, colours; public, `[SerializeField]` and
-     `_private` fields).
-   - **Material Property**: a material and one of its shader properties.
-   - **Shader Global**: a global shader float by name.
-3. Set **Show Bar** with **Min / Max** to draw a bar. A value flashes in the accent colour when it changes.
-4. Pick the corner, size and colours. The card scales with the screen's short side, so it looks the
-   same at 1080 and 4K, portrait or landscape.
-
-The card is a Screen Space Overlay canvas that is generated at runtime and never saved into the scene.
-Recordings and screenshots capture it, and **Take Screenshot (No UI)** keeps it unless **Keep In No UI
-Captures** is off. Turn **Show In Edit Mode** off to see it in Play Mode only.
-
-To show a setting changing on camera, drive it from one value to another (Play Mode):
-
-```csharp
-var overlay = Object.FindAnyObjectByType<ValueOverlay>();
-overlay.Sweep("Rain", 0f, 1f, 4f);               // by row label, over 4 seconds
-overlay.Sweep(0, 0f, 1f, 4f, easeInOut: true);   // by row index
-overlay.StopSweeps();
-```
-
-`Sweep` writes the value (float, int, bool or enum members with a setter or a field, material
-floats and ints, shader globals) and returns false if it can't. Values that only live in an editor
-window (not on a scene object, material or global) can't be shown: record that window with a screen
-recorder instead.
 
 ### From code
 
@@ -125,5 +89,5 @@ Both are outside `Assets/`. Add them to the project's `.gitignore`:
 
 | Assembly | Platforms | Contents |
 |---|---|---|
-| `NPIREEXE.Capture` | All | `ScreenshotCapture`, `ValueOverlay` |
-| `NPIREEXE.Capture.Editor` | Editor | Menus, `GameplayRecorder`, window, REC overlay, Value Overlay inspector |
+| `NPIREEXE.Capture` | All | `ScreenshotCapture` |
+| `NPIREEXE.Capture.Editor` | Editor | Menus, `GameplayRecorder`, window, overlay |

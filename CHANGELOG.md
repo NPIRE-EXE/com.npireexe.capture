@@ -7,18 +7,8 @@ All notable changes to this package are documented here. Versions follow [Semant
 ## [1.1.0] - 2026-11-16
 
 ### Added
-- `ValueOverlay` component: a card in a corner of the Game View showing live values (component
-  fields and properties, material properties, shader globals) with optional bars and a flash on
-  change. Captured by recordings and screenshots; `Sweep()` drives a value over time.
-- Inspector for Value Overlay rows that lists every supported value on a GameObject's components,
-  and a material's shader properties.
-- **Add Value Overlay** menu item.
 - `GameplayRecorder.ShortSide` and a **Short side** choice in the Recording Control window
-  (720, 1080, 1440, 2160), so recordings can be made at 4K for cropping in the edit.
-
-### Changed
-- **Take Screenshot (No UI)** keeps Value Overlay cards unless their Keep In No UI Captures is off.
-- Depends on `com.unity.ugui`.
+  (720, 1080, 1440, 2160), so recordings can be made at 4K for cropping or zooming in the edit.
 
 ## [1.0.1] - 2026-10-22
 
